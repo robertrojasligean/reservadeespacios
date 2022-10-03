@@ -1,0 +1,47 @@
+{% extends 'index.html' %} 
+{% block 'body' %}
+<h1>Master</h1>
+<h4>Espacios reservables</h4>
+<a href="nuevo" class="btn btn-primary btn-sm">Nuevo</a>
+<br>
+<br>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Espacio</th>
+            <th scope="col">Horas máximas reserva</th>
+            <th scope="col">Aforo</th>
+            <th scope="col">Habilitado</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for espacio_r in data%}
+        <tr >
+            <td>{{espacio_r.espacio.nombre}}</td>
+            <td>{{espacio_r.horasmaxreserva}}</td>
+            <td>{{espacio_r.aforo}}</td>
+            <td>{{espacio_r.habilitado|yesno:'Sí,No' }}</td>
+            <td class="pt-1">
+                <a class="btn btn-link" href="{% url 'editar-espacio-reserva' espacio_r.id %}">
+                    <h4>&#9998;</h4>
+                </a>
+                <form class="d-inline" action="{% url 'borrar-espacio-reserva' espacio_r.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-link text-danger"><h4>&#x2715;</h4></button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}
+{% block 'js' %}
+<script>
+    $( function() {
+        $( ".nav-item:nth-child(2)" ).hide();
+    } );
+</script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'index.html' %} 
+{% block 'body' %}
+<h1>Galileo</h1>
+<h4>Reservas</h4>
+<br>
+<br>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Espacio</th>
+            <th scope="col">Estudiante</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Hora</th>
+            <th scope="col">Estado</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reserva in reservas%}
+        <tr >
+            <td>{{reserva.espacio_reserva.espacio.nombre}}</td>
+            <td>{{reserva.estudiante.codigo}}-{{reserva.estudiante.nombre}}</td>
+            <td>{{reserva.fecha|date:"Y-m-d"}}</td>
+            <td>{{reserva.hora}}:00</td>
+            <td>{{reserva.estado}}</td>
+            <td class="pt-1">
+                {% if reserva.estado == 'PENDIENTE' %}
+                <form class="d-inline" action="{% url 'cumplir-reserva-galileo' reserva.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-link text-success"><h4>&#x2713;</h4></button>
+                </form>
+                <form class="d-inline" action="{% url 'cancelar-reserva-galileo' reserva.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-link text-danger"><h4>&#x2715;</h4></button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+{% block 'js' %}
+<script>
+    $( function() {
+        $( ".nav-item:nth-child(3)" ).hide();
+    } );
+</script>
+{% endblock %}
